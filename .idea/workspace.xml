@@ -4,12 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9d34bca0-ec54-4032-bd42-4af2a9d4bcde" name="Changes" comment="all">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+    <list default="true" id="9d34bca0-ec54-4032-bd42-4af2a9d4bcde" name="Changes" comment="fix">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/PacManGameController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/PacManGameManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/PacManGameOverController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/PacManMenuController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/PacManRenderer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/highscore.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/model/Ghost.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/model/Maze.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/model/PacMan.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/PacManApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/HelloController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/PacManController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/PacManApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/PacManApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/PacManController.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/hello-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/hello-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -86,7 +95,7 @@
       <updated>1703123772864</updated>
       <workItem from="1703123773983" duration="518000" />
       <workItem from="1703124300881" duration="38000" />
-      <workItem from="1703124480292" duration="2965000" />
+      <workItem from="1703124480292" duration="35451000" />
     </task>
     <task id="LOCAL-00001" summary="all">
       <option name="closed" value="true" />
@@ -104,14 +113,44 @@
       <option name="project" value="LOCAL" />
       <updated>1703127351375</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="fix">
+      <option name="closed" value="true" />
+      <created>1703127781054</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1703127781054</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="all" />
-    <option name="LAST_COMMIT_MESSAGE" value="all" />
+    <MESSAGE value="fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.RuntimeException" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

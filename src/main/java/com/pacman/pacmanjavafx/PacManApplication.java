@@ -1,23 +1,42 @@
 package com.pacman.pacmanjavafx;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
-import java.io.IOException;
+import javafx.geometry.Pos;
 
 import static com.pacman.pacmanjavafx.Config.HEIGHT;
 import static com.pacman.pacmanjavafx.Config.WIDTH;
 
 public class PacManApplication extends Application {
-    @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(PacManApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), WIDTH, HEIGHT);
-        stage.setTitle("Hello!");
-        stage.setScene(scene);
-        stage.show();
+
+    public PacManApplication() {
+
+    }
+
+    public Scene getScene() {
+        try {
+            FXMLLoader loader = new FXMLLoader(this.getClass().getResource("PacManMenuView.fxml"));
+            Parent gameRoot = (Parent)loader.load();
+            Scene scene = new Scene(gameRoot, WIDTH, HEIGHT);
+            scene.setFill(Color.BLACK);
+            return scene;
+        } catch (Exception var3) {
+            var3.printStackTrace();
+            return null;
+        }
+    }
+
+    public void start(Stage primaryStage) {
+        Scene scene = this.getScene();
+        primaryStage.setTitle("Cookie Collector");
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
