@@ -75,7 +75,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.pacman.pacmanjavafx/com.pacman.pacmanjavafx.HelloApplication</mainClass>
+                            <mainClass>com.pacman.pacmanjavafx/com.pacman.pacmanjavafx.PacManApplication</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

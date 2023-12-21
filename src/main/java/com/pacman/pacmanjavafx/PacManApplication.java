@@ -10,10 +10,10 @@ import java.io.IOException;
 import static com.pacman.pacmanjavafx.Config.HEIGHT;
 import static com.pacman.pacmanjavafx.Config.WIDTH;
 
-public class HelloApplication extends Application {
+public class PacManApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(PacManApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), WIDTH, HEIGHT);
         stage.setTitle("Hello!");
         stage.setScene(scene);
