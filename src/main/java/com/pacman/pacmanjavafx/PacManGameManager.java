@@ -6,11 +6,12 @@ import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class PacManGameManager {
 
-    private static final String HIGHSCORE_FILE_PATH = "src/main/java/com/pacman/pacmanjavafx/highscore.txt";
+    private static final String HIGHSCORE_FILE_NAME = "pacman_highscore.txt";
     private int highScore;
     private int score;
     private static PacManGameManager instance;
@@ -28,16 +29,41 @@ public class PacManGameManager {
 
     private void loadHighScore() {
         try {
-            String scoreString = new String(Files.readAllBytes(Paths.get(HIGHSCORE_FILE_PATH)));
-            highScore = Integer.parseInt(scoreString.trim());
+            String userHome = System.getProperty("user.home");
+            Path highScorePath = Paths.get(userHome, HIGHSCORE_FILE_NAME);
+
+            if (Files.exists(highScorePath)) {
+                String highScoreStr = new String(Files.readAllBytes(highScorePath));
+                highScore = Integer.parseInt(highScoreStr);
+            }
         } catch (IOException | NumberFormatException e) {
             highScore = 0;
         }
     }
 
+    // Methode zum Überprüfen, ob ein neuer Highscore erreicht wurde
+    public String[] getGameOverMessages(int currentScore) {
+        if (currentScore > highScore) {
+            return new String[]{
+                    "Neuer Highscore: " + currentScore + "!",
+                    "Großartig, du hast den alten Highscore geschlagen!"
+            };
+        } else {
+            return new String[]{
+                    "Oh nein, du hast verloren!",
+                    "Versuche es noch einmal und schlage den Highscore von " + highScore + "."
+            };
+        }
+    }
+
     public void saveHighScore() {
         try {
-            Files.write(Paths.get(HIGHSCORE_FILE_PATH), String.valueOf(highScore).getBytes());
+            // Pfad zum Benutzerverzeichnis ermitteln
+            String userHome = System.getProperty("user.home");
+            Path highScorePath = Paths.get(userHome, HIGHSCORE_FILE_NAME);
+
+            // Highscore in der Datei speichern
+            Files.write(highScorePath, String.valueOf(highScore).getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -5,36 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9d34bca0-ec54-4032-bd42-4af2a9d4bcde" name="Changes" comment="fix">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/Cody.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/ImageCache.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/SpriteSheet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/GameOverView.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/PacManGameView.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/PacManMenuView.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/assets/cody/Cody.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/assets/cody/voice.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/assets/img/BigCoin.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/assets/img/Coin.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/assets/img/PacMan.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/assets/img/blueGhost.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/assets/img/cookie.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/assets/img/greenGhost.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/assets/img/orangeGhost.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/assets/img/purplePortal.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/assets/img/redGhost.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/assets/img/vulnerableGhost.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/assets/img/yellowGhost.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/css/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/highscore.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/assets/font/8bit_wonder.TTF" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/PacManApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/PacManApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/PacManGameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/PacManGameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/PacManGameOverController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/PacManGameOverController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/PacManGameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/PacManGameManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/PacManRenderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/PacManRenderer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/model/Ghost.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/model/Ghost.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/SpriteSheet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/SpriteSheet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/highscore.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/model/Maze.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pacman/pacmanjavafx/model/Maze.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/hello-view.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/PacManMenuView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/PacManMenuView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/highscore.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,11 +51,12 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "master",
-    "last_opened_file_path": "/Users/kreye/Documents/GitHub/PacManJavaFx/src/main/resources/com/pacman/pacmanjavafx/assets/pacman",
+    "last_opened_file_path": "/Users/kreye/Documents/GitHub/PacManJavaFx/src/main/resources/com/pacman/pacmanjavafx/assets/font",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.11876482",
     "project.structure.side.proportion": "0.33924612",
@@ -83,6 +65,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/assets/font" />
       <recent name="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/assets/pacman" />
       <recent name="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/assets/cody/pacman" />
       <recent name="$PROJECT_DIR$/src/main/resources/com/pacman/pacmanjavafx/assets/cody" />
@@ -123,7 +106,7 @@
       <updated>1703123772864</updated>
       <workItem from="1703123773983" duration="518000" />
       <workItem from="1703124300881" duration="38000" />
-      <workItem from="1703124480292" duration="49889000" />
+      <workItem from="1703124480292" duration="59706000" />
     </task>
     <task id="LOCAL-00001" summary="all">
       <option name="closed" value="true" />
@@ -157,7 +140,15 @@
       <option name="project" value="LOCAL" />
       <updated>1703198667022</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="fix">
+      <option name="closed" value="true" />
+      <created>1703242632905</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1703242632905</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

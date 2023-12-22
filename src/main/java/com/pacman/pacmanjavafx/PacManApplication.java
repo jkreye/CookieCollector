@@ -36,6 +36,8 @@ public class PacManApplication extends Application {
     }
 
     public void start(Stage primaryStage) {
+        Font.loadFont(getClass().getResourceAsStream("assets/font/8bit_wonder.TTF"), 25);
+
         Scene scene = this.getScene();
         primaryStage.setTitle("Cookie Collector");
         primaryStage.setScene(scene);

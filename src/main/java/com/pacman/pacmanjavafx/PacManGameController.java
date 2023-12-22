@@ -69,6 +69,12 @@ public class PacManGameController {
 
     private long lastFrameTime = 0; // Zeit des letzten Frames
 
+    // Animation
+    private static final long ANIMATION_INTERVAL = 75_000_000;
+    private long lastAnimationTime = System.nanoTime();
+    private int animationIndex = 0;
+
+
 
     //
 
@@ -80,6 +86,10 @@ public class PacManGameController {
 
     public Maze getMazeInst() {
         return maze;
+    }
+
+    public ACTION getLastDirection() {
+        return lastDirection;
     }
 
     // Enum
@@ -135,7 +145,7 @@ public class PacManGameController {
 
                 // Rendering des Spiels
                 if (now - lastFrameTime >= FRAME_TIME) {
-                    renderGame();
+                    renderGame(now);
                     lastFrameTime = now;
                 }
 
@@ -247,7 +257,7 @@ public class PacManGameController {
     private void updateGame(long now) {
         // Aktualisieren Sie Spielzustände: Bewegungen von Pac-Man und Geistern, Kollisionen, etc.
 
-
+        updateAnimationIndex();
         checkAndTeleportPacman();
         checkPacmanGhostCollision();
         checkForPowerPill();
@@ -264,7 +274,7 @@ public class PacManGameController {
     }
 
 
-    private void renderGame() {
+    private void renderGame(long now) {
         GraphicsContext gc = gameCanvas.getGraphicsContext2D();
         int cellSize = Maze.getCellSize();
         int mazeStartX = maze.getMazeStartX();
@@ -279,7 +289,7 @@ public class PacManGameController {
         gc.fillRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight());
 
         // Zeichnen von Pac-Man als gelber Kreis
-        renderer.updateAnimationIndex();
+        renderer.setAnimationIndex(this.animationIndex);
         renderer.renderLevelAndProgress(this, mazeStartX, maze.getMazeWidth());
         renderer.renderMaze(maze, mazeStartX,mazeStartY);
         renderer.renderPacMan(pacman, cellSize/2, mazeStartX,mazeStartY);
@@ -288,10 +298,29 @@ public class PacManGameController {
 
     }
 
+    private void updateAnimationIndex() {
+        long currentTime = System.nanoTime();
+
+        if ((currentTime - lastAnimationTime) > ANIMATION_INTERVAL) {
+            animationIndex = (animationIndex + 1) % 8; // Es gibt 8 Sprites für die Animation
+            lastAnimationTime = currentTime;
+        }
+    }
+
 
     // GAMEOVER
     private void gameOver() {
         gameLoop.stop(); // Stoppt den AnimationTimer
+        // Highscore
+
+        int currentScore = getScore(); // Erhalten Sie den aktuellen Score
+        int highScore = PacManGameManager.getInstance().getHighScore(); // Erhalten Sie den aktuellen Highscore
+        if (currentScore > highScore) {
+            // Neuer Highscore wurde erreicht
+            PacManGameManager.getInstance().setScore(currentScore);
+            PacManGameManager.getInstance().updateHighscore();
+        }
+        // Scene
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("GameOverView.fxml"));
             Parent gameOverRoot = loader.load();
@@ -300,11 +329,9 @@ public class PacManGameController {
 
             // Erstellen Sie eine Instanz von Cody
             Cody cody = new Cody();
-            String[] messages = new String[] {
-                    "Oh nein, du hast verloren!",
-                    "Versuche es noch einmal und schlage den Highscore."
-            };
 
+
+            String[] messages = PacManGameManager.getInstance().getGameOverMessages(currentScore);
             cody.say(messages);
 
             // Fügen Sie Cody zur Parent-Instanz hinzu

@@ -1,7 +1,7 @@
 package com.pacman.pacmanjavafx;
 
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.image.*;
+
 import java.io.InputStream;
 
 import static com.pacman.pacmanjavafx.PacManGameController.GhostType.*;
@@ -14,15 +14,27 @@ public class SpriteSheet {
     private int tileSize;
 
     public SpriteSheet(String path, int tileSize) {
-        this.spriteSheet = new Image(path);
+        InputStream is = getClass().getResourceAsStream(path);
+        if (is == null) {
+            System.out.println("Ressource nicht gefunden");
+        } else {
+            this.spriteSheet = new Image(is);
+        }
         this.tileSize = tileSize;
     }
 
-    public ImageView getSprite(int row, int column) {
-        ImageView imageView = new ImageView(spriteSheet);
-        imageView.setViewport(new javafx.geometry.Rectangle2D(column * tileSize, row * tileSize, tileSize, tileSize));
-        return imageView;
+    public Image getSprite(int index) {
+        int numSpritesPerRow = (int) (spriteSheet.getWidth() / tileSize);
+        int x = (index % numSpritesPerRow) * tileSize;
+        int y = (index / numSpritesPerRow) * tileSize;
+
+        PixelReader reader = spriteSheet.getPixelReader();
+        return new WritableImage(reader, x, y, tileSize, tileSize);
     }
-}
+
+    public Image getImage() {
+        return this.spriteSheet;
+    }
 
 }
+

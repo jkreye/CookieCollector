@@ -13,15 +13,15 @@
 
     <StackPane fx:id="stackPane" prefHeight="1080" prefWidth="1920">
         <VBox fx:id="vbox" alignment="CENTER" spacing="20">
-            <Label text="Pac-Man" style="-fx-font-size: 80px; -fx-text-fill: yellow;"
+            <Label text="Cookie Collector" style="-fx-font-size: 70px; -fx-text-fill: yellow;"
                    styleClass="custom-font"/>
-            <Text fx:id="highscoreText" text="Highscore: " style="-fx-font-size: 40px; -fx-text-fill: white;"
+            <Text fx:id="highscoreText" text="Highscore: " style="-fx-font-size: 20px; -fx-text-fill: white;"
                   styleClass="custom-font"/>
             <Button fx:id="startButton" text="Start Game" onAction="#onStartButtonClicked"
-                    style="-fx-background-color: transparent; -fx-font-size: 60px; -fx-text-fill: yellow;"
+                    style="-fx-background-color: transparent; -fx-font-size: 40px; -fx-text-fill: white;"
                     styleClass="custom-font"/>
             <Button fx:id="exitButton" text="Exit Game" onAction="#onExitButtonClicked"
-                    style="-fx-background-color: transparent; -fx-font-size: 60px; -fx-text-fill: yellow;"
+                    style="-fx-background-color: transparent; -fx-font-size: 40px; -fx-text-fill: white;"
                     styleClass="custom-font"/>
         </VBox>
     </StackPane>

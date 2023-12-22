@@ -1,12 +1,13 @@
 package com.pacman.pacmanjavafx;
 
 import com.pacman.pacmanjavafx.model.*;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-
 import java.util.List;
 
 
@@ -14,36 +15,64 @@ public class PacManRenderer {
     private final GraphicsContext gc;
     private PacManGameController gameController;
     private int animationIndex = 0;
-    private long lastAnimationTime = 0;
-    private static final long ANIMATION_INTERVAL = 100; // Zeit in Millisekunden zwischen den Animationsframes
 
 
-    private SpriteSheet ghostSpriteSheet;
     private SpriteSheet pacmanSpriteSheet;
-    private SpriteSheet coinSpriteSheet;
+    private SpriteSheet ghostSHADOWSprites;
+    private SpriteSheet ghostPOKEYSprites;
+    private SpriteSheet ghostSPEEDYSprites;
+    private SpriteSheet ghostBASHFULSprites;
+    private SpriteSheet ghostVULNERABLESprites;
+    private final SpriteSheet powerpillSpriteSheet;
 
     public PacManRenderer(GraphicsContext gc, PacManGameController gameController) {
         this.gc = gc;
         this.gameController = gameController;
-        // this.ghostSpriteSheet = SpriteSheet.getGhostSprite(PacManGameController.GhostType.SPEEDY); // Beispiel
-        this.pacmanSpriteSheet = new SpriteSheet("path/to/pacman_spritesheet.png", 32);
-        // this.coinSpriteSheet = SpriteSheet.getCoinSprite();
-    }
 
-    public void updateAnimationIndex() {
-        // Aktualisiere den Animationsindex, wenn genug Zeit vergangen ist
-        long currentTime = System.currentTimeMillis();
-        if (currentTime - lastAnimationTime > ANIMATION_INTERVAL) {
-            animationIndex = (animationIndex + 1) % 8; // Es gibt 8 Sprites für die Animation
-            lastAnimationTime = currentTime;
-        }
+        this.pacmanSpriteSheet = new SpriteSheet("/com/pacman/pacmanjavafx/assets/img/PacMan.png", 16);
+        this.powerpillSpriteSheet = new SpriteSheet("/com/pacman/pacmanjavafx/assets/img/cookie.png", 353);
+        this.ghostVULNERABLESprites = new SpriteSheet("/com/pacman/pacmanjavafx/assets/img/vulnerableGhost.png", 16);
+        this.ghostSHADOWSprites = new SpriteSheet("/com/pacman/pacmanjavafx/assets/img/blueGhost.png", 16);
+        this.ghostPOKEYSprites = new SpriteSheet("/com/pacman/pacmanjavafx/assets/img/greenGhost.png", 16);
+        this.ghostBASHFULSprites = new SpriteSheet("/com/pacman/pacmanjavafx/assets/img/redGhost.png", 16);
+        this.ghostSPEEDYSprites = new SpriteSheet("/com/pacman/pacmanjavafx/assets/img/yellowGhost.png", 16);
+
     }
 
     public void renderPacMan(PacMan pacman, int radius,int startX, int startY) {
-        gc.setFill(Color.YELLOW);
-        gc.fillOval(startX+pacman.getX(), startY+pacman.getY(), radius * 2, radius * 2);
-        // ImageView pacmanSprite = pacmanSpriteSheet.getSprite(animationIndex);
-        // gc.drawImage(pacmanSprite.getImage(), startX + img.getX(), startY + img.getY(), radius * 2, radius * 2);
+        Image pacmanSprite = pacmanSpriteSheet.getSprite(animationIndex);
+        PacManGameController.ACTION pacmanDirection = gameController.getLastDirection();
+
+        ImageView pacmanImageView = new ImageView(pacmanSprite);
+        // Rotieren des Sprites basierend auf der Richtung
+        double rotationAngle = 0;
+        switch (pacmanDirection) {
+            case MOVE_UP:
+                rotationAngle = -90;
+                break;
+            case MOVE_DOWN:
+                rotationAngle = 90;
+                break;
+            case MOVE_LEFT:
+                rotationAngle = 180;
+                pacmanImageView.setScaleY(-1);
+                break;
+            case MOVE_RIGHT:
+                // Keine Drehung notwendig
+                break;
+        }
+
+        pacmanImageView.setRotate(rotationAngle);
+        // Skalieren des Bildes auf die Größe der Zelle
+        pacmanImageView.setFitWidth(radius*2);
+        pacmanImageView.setFitHeight(radius*2);
+
+        SnapshotParameters params = new SnapshotParameters();
+        params.setFill(Color.TRANSPARENT);
+
+        Image rotatedImage = pacmanImageView.snapshot(params, null);
+        // Zeichnen des Sprites an der Position von Pac-Man
+        gc.drawImage(rotatedImage, startX + pacman.getX(), startY + pacman.getY(), radius*2, radius*2);
 
     }
 
@@ -104,8 +133,22 @@ public class PacManRenderer {
         int killCoinSize = (int) (cellSize * 0.8);
         int killCoinX = startX + col * cellSize + cellSize / 2 - killCoinSize / 2;
         int killCoinY = startY + row * cellSize + cellSize / 2 - killCoinSize / 2;
-        gc.setFill(Color.BROWN);
-        gc.fillOval(killCoinX, killCoinY, killCoinSize, killCoinSize);
+        Image killCoinSprite = powerpillSpriteSheet.getImage();
+
+        ImageView imageView = new ImageView(killCoinSprite);
+
+        imageView.setFitWidth(killCoinSize);
+        imageView.setFitHeight(killCoinSize);
+
+        imageView.setPreserveRatio(true);
+        SnapshotParameters params = new SnapshotParameters();
+        params.setFill(Color.TRANSPARENT);
+
+        Image scaledImage = imageView.snapshot(params, null);
+
+        // Zeichnen Sie das skalierte Bild auf den Canvas
+        gc.drawImage(scaledImage, killCoinX, killCoinY);
+
     }
 
     private void drawTeleportPoints(GraphicsContext gc, int startX, int startY, int cellSize, int row, int col) {
@@ -120,33 +163,60 @@ public class PacManRenderer {
 
     public void renderGhosts(List<Ghost> ghosts, int radius, int mazeStartX, int mazeStartY) {
         for (Ghost ghost : ghosts) {
-
             // Umrechnen der Geisterposition in Bildschirmkoordinaten
-            int ghostX = ghost.getX() +mazeStartX;
-            int ghostY = ghost.getY() +mazeStartY;
+            int ghostX = ghost.getX() + mazeStartX;
+            int ghostY = ghost.getY() + mazeStartY;
 
-            // Farbe basierend auf dem Geistertyp setzen
+            SpriteSheet ghostSpriteSheet;
             if (ghost.getVulnerable()) {
                 if (ghost.isBlinking() && (System.currentTimeMillis() / 250) % 2 == 0) {
-                    gc.setFill(Color.YELLOW);
-                    gc.fillOval(ghostX, ghostY, radius * 2, radius * 2); // Blinkfarbe
+                    ghostSpriteSheet = getGhostSprite(ghost); // Blinkfarbe
                 } else {
-                    gc.setFill(Color.BLUE);
-                    gc.fillOval(ghostX, ghostY, radius * 2, radius * 2); // Normale Farbe für verwundbare Geister
+                    ghostSpriteSheet = ghostVULNERABLESprites;
                 }
             } else {
-                // Farbe basierend auf dem Geistertyp setzen
-                gc.setFill(Color.GREEN);
-                gc.fillOval(ghostX, ghostY, radius * 2, radius * 2);
-
+                ghostSpriteSheet = getGhostSprite(ghost);
             }
 
-            // Zeichnen des Geists
-            // g.fillOval(ghostX, ghostY, cellSize, cellSize);
-            // g.drawRect(ghostX, ghostY, cellSize, cellSize);
+            Image ghostSprite = ghostSpriteSheet.getSprite(animationIndex);
 
+            ImageView imageView = new ImageView(ghostSprite);
+            imageView.setFitWidth(radius * 2); // Skalieren auf die Größe des Geistes
+            imageView.setFitHeight(radius * 2);
+
+            imageView.setPreserveRatio(true);
+            SnapshotParameters params = new SnapshotParameters();
+            params.setFill(Color.TRANSPARENT);
+
+            Image scaledImage = imageView.snapshot(params, null);
+
+            // Zeichnen Sie das skalierte Bild auf den Canvas
+            gc.drawImage(scaledImage, ghostX, ghostY);
         }
     }
+
+    public SpriteSheet getGhostSprite(Ghost ghost) {
+        SpriteSheet ghostSpriteSheet;
+
+        switch (ghost.getType()) {
+            case SHADOW:
+                ghostSpriteSheet = ghostSHADOWSprites;
+                break;
+            case SPEEDY:
+                ghostSpriteSheet = ghostSPEEDYSprites;
+                break;
+            case BASHFUL:
+                ghostSpriteSheet = ghostBASHFULSprites;
+                break;
+            case POKEY:
+                ghostSpriteSheet = ghostPOKEYSprites;
+                break;
+            default:
+                throw new IllegalStateException("Unbekannter Geistertyp");
+        }
+        return ghostSpriteSheet;
+    }
+
 
     public void renderLevelAndProgress(PacManGameController gameController, int startX, int mazeWidth) {
         // Level-Text
@@ -195,5 +265,12 @@ public class PacManRenderer {
         gc.setFill(Color.GREEN);
         double progressWidth = progress * width;
         gc.fillRect(x, y, progressWidth, progressBarHeight);
+    }
+
+    public void setAnimationIndex(int i) {
+        this.animationIndex=i;
+    }
+    public int getAnimationIndex() {
+        return this.animationIndex;
     }
 }
