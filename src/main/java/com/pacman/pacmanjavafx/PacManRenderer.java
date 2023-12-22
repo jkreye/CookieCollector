@@ -4,6 +4,8 @@ import com.pacman.pacmanjavafx.model.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 import java.util.List;
 
@@ -11,15 +13,37 @@ import java.util.List;
 public class PacManRenderer {
     private final GraphicsContext gc;
     private PacManGameController gameController;
+    private int animationIndex = 0;
+    private long lastAnimationTime = 0;
+    private static final long ANIMATION_INTERVAL = 100; // Zeit in Millisekunden zwischen den Animationsframes
+
+
+    private SpriteSheet ghostSpriteSheet;
+    private SpriteSheet pacmanSpriteSheet;
+    private SpriteSheet coinSpriteSheet;
 
     public PacManRenderer(GraphicsContext gc, PacManGameController gameController) {
         this.gc = gc;
         this.gameController = gameController;
+        // this.ghostSpriteSheet = SpriteSheet.getGhostSprite(PacManGameController.GhostType.SPEEDY); // Beispiel
+        this.pacmanSpriteSheet = new SpriteSheet("path/to/pacman_spritesheet.png", 32);
+        // this.coinSpriteSheet = SpriteSheet.getCoinSprite();
+    }
+
+    public void updateAnimationIndex() {
+        // Aktualisiere den Animationsindex, wenn genug Zeit vergangen ist
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastAnimationTime > ANIMATION_INTERVAL) {
+            animationIndex = (animationIndex + 1) % 8; // Es gibt 8 Sprites für die Animation
+            lastAnimationTime = currentTime;
+        }
     }
 
     public void renderPacMan(PacMan pacman, int radius,int startX, int startY) {
         gc.setFill(Color.YELLOW);
         gc.fillOval(startX+pacman.getX(), startY+pacman.getY(), radius * 2, radius * 2);
+        // ImageView pacmanSprite = pacmanSpriteSheet.getSprite(animationIndex);
+        // gc.drawImage(pacmanSprite.getImage(), startX + img.getX(), startY + img.getY(), radius * 2, radius * 2);
 
     }
 
@@ -122,5 +146,54 @@ public class PacManRenderer {
             // g.drawRect(ghostX, ghostY, cellSize, cellSize);
 
         }
+    }
+
+    public void renderLevelAndProgress(PacManGameController gameController, int startX, int mazeWidth) {
+        // Level-Text
+        int currentLevel = gameController.getMazeInst().getCurrentLevel() + 1;
+        String levelText = "Level " + currentLevel;
+        gc.setFill(Color.WHITE); // Weißer Text
+        gc.setFont(new Font("Arial", 20)); // Schriftart und -größe einstellen
+
+        // Berechnen der Position für den Level-Text
+        double levelTextWidth = gc.getFont().getSize() * levelText.length() * 0.6; // angenäherte Breite
+        double x = startX + mazeWidth - levelTextWidth - 10; // 10 Pixel vom rechten Rand
+        double y = 30; // y-Position für den Text
+
+        gc.fillText(levelText, x, y);
+
+        // Fortschrittsleiste
+        renderProgressBar(gameController, x, y + 5, levelTextWidth); // 5 Pixel unterhalb des Textes
+    }
+
+    public void renderScoreAndLives(Text scoreText, Maze maze) {
+        // Score
+        int score = gameController.getScore();
+        scoreText.setText("Score: " + score); // Aktualisieren des Score-Texts
+
+        // Leben
+        int lives = gameController.getLives();
+        int livesX = maze.getMazeStartX(); // X-Position für die Leben
+        int livesY = maze.getMazeStartY() - 75; // Y-Position für die Leben
+        int circleDiameter = 15; // Durchmesser der Kreise
+
+        for (int i = 0; i < lives; i++) {
+            gc.setFill(Color.YELLOW);
+            gc.fillOval(livesX + i * (circleDiameter + 5), livesY, circleDiameter, circleDiameter);
+        }
+    }
+
+    private void renderProgressBar(PacManGameController gameController, double x, double y, double width) {
+        float progress = gameController.getProgress();
+        int progressBarHeight = 8;
+
+        // Hintergrund der Fortschrittsleiste
+        gc.setFill(Color.DARKGRAY);
+        gc.fillRect(x, y, width, progressBarHeight);
+
+        // Fortschritt
+        gc.setFill(Color.GREEN);
+        double progressWidth = progress * width;
+        gc.fillRect(x, y, progressWidth, progressBarHeight);
     }
 }

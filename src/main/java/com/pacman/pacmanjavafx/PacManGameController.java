@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -51,18 +52,21 @@ public class PacManGameController {
     private int lives = 3; // Anzahl der Leben
 
     private long vulnerabilityDuration = 0;
-    private static final long VULNERABILITY_TIME = 5 * 1_000_000_000L; // 5 Sekunden in Nanosekunden
+    private static final long VULNERABILITY_TIME = 7 * 1_000_000_000L;
+    private static final long BLINK_THRESHOLD = 3 * 1_000_000_000L;
 
-    private long nextGhostReleaseTime;
-    private static final long GHOST_RELEASE_INTERVAL = 10_000L * 1_000_000L; // 5 Sekunden in Nanosekunden
+    private long nextGhostReleaseTime = 0;
+    private static final long GHOST_RELEASE_INTERVAL = 10_000L * 1_000_000L; // 10 Sekunden in Nanosekunden
     private long lastGhostReleaseTime = 0;
-    private static final long INITIAL_RELEASE_DELAY = 2_000L * 1_000_000L; // 2 Sekunde in Nanosekunden
-    private static final long BLINK_THRESHOLD = 2 * 1_000_000_000L; // Blinken beginnt 2 Sekunden vor Ende der Verwundbarkeit
+    private static final long INITIAL_RELEASE_DELAY = 5_000L * 1_000_000L; // 2 Sekunde in Nanosekunden
 
     // GameLoop
-    private static final long UPDATE_TIME = 1_000_000_000 / 20; // 20 Updates pro Sekunde
+    private static long UPDATE_TIME = 1_000_000_000 / 20; // 20 Updates pro Sekunde
+    private static long UPDATE_TIME_GHOSTS = 1_000_000_000 / 16; // 16 Updates pro Sekunde
     private static final long FRAME_TIME = 1_000_000_000 / 60; // 60 Frames pro Sekunde
     private long lastUpdateTime = 0; // Zeit des letzten Updates
+    private long lastUpdateTimeGhosts = 0; // Zeit des letzten Updates
+
     private long lastFrameTime = 0; // Zeit des letzten Frames
 
 
@@ -73,6 +77,10 @@ public class PacManGameController {
     // ESC GAMEOVER
     private long lastEscPressTime = 0;
     private static final long DOUBLE_PRESS_INTERVAL = 500; // Zeitintervall für Doppelklick in Millisekunden
+
+    public Maze getMazeInst() {
+        return maze;
+    }
 
     // Enum
     public enum ACTION{
@@ -117,7 +125,12 @@ public class PacManGameController {
                 // Update der Spiellogik
                 if (now - lastUpdateTime >= UPDATE_TIME) {
                     updateGame(now);
+                    processMovement();
                     lastUpdateTime = now;
+                }
+                if (now - lastUpdateTimeGhosts >= UPDATE_TIME_GHOSTS) {
+                    updateGhostPositions();
+                    lastUpdateTimeGhosts = now;
                 }
 
                 // Rendering des Spiels
@@ -125,6 +138,7 @@ public class PacManGameController {
                     renderGame();
                     lastFrameTime = now;
                 }
+
             }
         };
         gameLoop.start();
@@ -152,7 +166,6 @@ public class PacManGameController {
      */
     private void initializePacman() {
         Point2D pacmanStart = maze.findPacmanStart();
-        System.out.println(pacmanStart.getX());
         this.pacman = new PacMan((int) pacmanStart.getX(), (int) pacmanStart.getY(), 0); // Startposition von Pac-Man
         this.pacman.setSpeed(10); // Setzen der Geschwindigkeit
     }
@@ -167,14 +180,16 @@ public class PacManGameController {
     }
 
     private void setupGame() {
+        updateTickratesForLevel(1);
         // Initialisieren Sie Pac-Man, Geister, Labyrinth, etc.
         this.maze = new Maze();
         maze.calculateMazeSize(WIDTH, HEIGHT, maze.getGrid(), PADDING_TOP);
+        updateScorePosition(maze.getMazeStartX(), maze.getMazeStartY()-PADDING_TOP);
         lastDirection = ACTION.MOVE_NONE;
         nextDirection = ACTION.MOVE_NONE;
         lives = 3;
         score = 0;
-        nextGhostReleaseTime = System.currentTimeMillis() + INITIAL_RELEASE_DELAY;
+        this.nextGhostReleaseTime = System.currentTimeMillis() + INITIAL_RELEASE_DELAY;
 
         totalDots = maze.getTotalDots();
         totalPpillscoins = maze.getTotalPpills();
@@ -182,6 +197,22 @@ public class PacManGameController {
         collectedPpills = 0;
 
         initializePacmanAndGhosts();
+    }
+
+    /**
+     * Aktualisiert die Tickraten für die Bewegungen von Pac-Man und den Geistern für das angegebene Level.
+     * Die Tickraten beginnen bei einer Basisrate und erhöhen sich mit jedem Level, um die Schwierigkeit zu steigern.
+     *
+     * @param nextLevel Das nächste Level, für das die Tickraten aktualisiert werden sollen.
+     */
+    private void updateTickratesForLevel(int nextLevel) {
+        final int baseTickRatePacman = 19;
+        final int baseTickRateGhosts = 17;
+        final int levelFactor = 1; // Erhöhung der Geschwindigkeit pro Level
+
+        UPDATE_TIME = 1_000_000_000 / (baseTickRatePacman + levelFactor * (nextLevel - 1)); // 20 Updates pro Sekunde
+        UPDATE_TIME_GHOSTS = 1_000_000_000 / (baseTickRateGhosts + levelFactor * (nextLevel - 1)); // 20 Updates pro Sekunde
+
     }
 
     private void setupInputHandling() {
@@ -215,8 +246,8 @@ public class PacManGameController {
 
     private void updateGame(long now) {
         // Aktualisieren Sie Spielzustände: Bewegungen von Pac-Man und Geistern, Kollisionen, etc.
-        processMovement();
-        updateGhostPositions();
+
+
         checkAndTeleportPacman();
         checkPacmanGhostCollision();
         checkForPowerPill();
@@ -248,9 +279,13 @@ public class PacManGameController {
         gc.fillRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight());
 
         // Zeichnen von Pac-Man als gelber Kreis
+        renderer.updateAnimationIndex();
+        renderer.renderLevelAndProgress(this, mazeStartX, maze.getMazeWidth());
         renderer.renderMaze(maze, mazeStartX,mazeStartY);
         renderer.renderPacMan(pacman, cellSize/2, mazeStartX,mazeStartY);
         renderer.renderGhosts(getGhosts(), cellSize/2, mazeStartX,mazeStartY);
+        renderer.renderScoreAndLives(scoreText, maze);
+
     }
 
 
@@ -263,9 +298,33 @@ public class PacManGameController {
             // Optional: Hier könnten Sie Highscore-Logik oder andere Aktionen durchführen
             PacManGameManager.getInstance().updateHighscore();
 
+            // Erstellen Sie eine Instanz von Cody
+            Cody cody = new Cody();
+            String[] messages = new String[] {
+                    "Oh nein, du hast verloren!",
+                    "Versuche es noch einmal und schlage den Highscore."
+            };
+
+            cody.say(messages);
+
+            // Fügen Sie Cody zur Parent-Instanz hinzu
+            if (gameOverRoot instanceof Pane) {
+                ((Pane) gameOverRoot).getChildren().add(cody);
+            }
+
             Scene gameOverScene = new Scene(gameOverRoot, WIDTH, HEIGHT);
             Stage stage = (Stage) gameCanvas.getScene().getWindow();
+
+            // Listener für Änderungen der Szene hinzufügen
+            stage.sceneProperty().addListener((observable, oldScene, newScene) -> {
+                // Überprüfen, ob die alte Szene die gameOverScene war
+                if (oldScene != null && oldScene.getRoot() == gameOverRoot) {
+                    cody.quit();
+                }
+            });
+
             stage.setScene(gameOverScene);
+
             stage.show();
         } catch (Exception e) {
             e.printStackTrace(); // Besseres Fehlerhandling
@@ -304,12 +363,15 @@ public class PacManGameController {
     }
 
 
-    private void updateGhostStates(long deltaTime) {
+    private void updateGhostStates(long now) {
         if (vulnerabilityDuration > 0) {
+            long deltaTime = now - lastUpdateTime;
+            vulnerabilityDuration -= deltaTime;
             updateVulnerabilityState(deltaTime);
         }
 
         for (Ghost ghost : ghosts) {
+            //  System.out.println(ghost.getVulnerable());
             if (ghost.isMovingToReleasePoint()) {
                 ghost.moveToReleasePoint(maze.findReleasePoint());
             }
@@ -323,6 +385,7 @@ public class PacManGameController {
                 ghost.setBlinking(true);
             }
         }
+
         if (vulnerabilityDuration <= 0) {
             for (Ghost ghost : ghosts) {
                 ghost.setVulnerable(false);
@@ -367,6 +430,12 @@ public class PacManGameController {
         }
     }
 
+    public void updateScorePosition(double x, double y) {
+        scoreText.setLayoutX(x);
+        scoreText.setLayoutY(y);
+    }
+
+
     /**
      * Überprüft, ob das aktuelle Level abgeschlossen ist.
      * Der Fortschritt wird anhand der Anzahl der gesammelten Punkte und der Gesamtzahl der Punkte im Level berechnet.
@@ -391,6 +460,7 @@ public class PacManGameController {
         int collectedItems = collectedDots + collectedPpills;
 
         if (totalItems == 0) return 0; // Vermeidung einer Division durch Null
+
         return (float) collectedItems / totalItems;
     }
 
@@ -403,7 +473,15 @@ public class PacManGameController {
      */
     private void onLevelComplete() {
         // next level!
+        int nextLevel = (maze.getCurrentLevel())+1;
+        maze.changeLevel(nextLevel);
 
+        totalDots = maze.getTotalDots();
+        totalPpillscoins = maze.getTotalPpills();
+        resetPacmanAndGhosts();
+        collectedDots=0;
+        collectedPpills=0;
+        updateTickratesForLevel(nextLevel);
     }
 
     /**
@@ -452,8 +530,6 @@ public class PacManGameController {
                     pacmanPosition.getX() >= 0 && pacmanPosition.getX() < grid[(int) pacmanPosition.getY()].length) {
                 char cell = grid[(int) pacmanPosition.getY()][(int) pacmanPosition.getX()];
                 if (cell == 'T') {
-
-                    // triggerPortalBlink(); // Auslösen des Blinkens am Portal
                     teleportPacman(pacmanPosition, grid, cellSize);
                 }
             }

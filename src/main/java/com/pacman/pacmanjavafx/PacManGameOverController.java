@@ -30,8 +30,10 @@ public class PacManGameOverController {
     private void playAgain() {
         try {
             // Lädt das Spiel erneut
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("PacManGameView.fxml"));
             Parent gameRoot = loader.load();
+
             Scene gameScene = new Scene(gameRoot, WIDTH, HEIGHT);
             Stage stage = (Stage) retryButton.getScene().getWindow();
             stage.setScene(gameScene);

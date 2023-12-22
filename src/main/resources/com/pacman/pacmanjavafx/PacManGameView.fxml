@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.pacman.pacmanjavafx.PacManGameController"
+            prefHeight="1080" prefWidth="1920" style="-fx-background-color: black;">
+
+    <Canvas fx:id="gameCanvas" width="1920" height="1080" />
+
+    <Text fx:id="scoreText" text="Score: 0" layoutX="20" layoutY="150"
+          style="-fx-font-size: 30px; -fx-fill: white;"/>
+</AnchorPane>

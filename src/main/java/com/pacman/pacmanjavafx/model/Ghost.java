@@ -18,7 +18,7 @@ public class Ghost {
     private boolean isInJail;
     private boolean isMovingToReleasePoint;
     private boolean blinking;
-    private static final int STEP_SIZE = 1; // Größe eines Schrittes
+    private static final int STEP_SIZE = 3; // Größe eines Schrittes
     private PacManGameController.ACTION direction = PacManGameController.ACTION.MOVE_UP;
 
     public Ghost(int startX, int startY, PacManGameController.GhostType type, int speed, char letter) {
@@ -109,17 +109,33 @@ public class Ghost {
         // Logik, um den Geist Schritt für Schritt zum Freigabepunkt zu bewegen
         // Bewegung auf der X-Achse
         if (x < releasePoint.getX()) {
-            x += STEP_SIZE;
+            if (releasePoint.getX() - x < STEP_SIZE) {
+                x = (int) releasePoint.getX(); // Setze x direkt auf das Ziel, wenn der verbleibende Abstand kleiner als STEP_SIZE ist
+            } else {
+                x += STEP_SIZE;
+            }
         } else if (x > releasePoint.getX()) {
-            x -= STEP_SIZE;
+            if (x - releasePoint.getX() < STEP_SIZE) {
+                x = (int) releasePoint.getX(); // Setze x direkt auf das Ziel, wenn der verbleibende Abstand kleiner als STEP_SIZE ist
+            } else {
+                x -= STEP_SIZE;
+            }
         }
 
         // Bewegung auf der Y-Achse
         if (x == releasePoint.getX()) {
             if (y < releasePoint.getY()) {
-                y += STEP_SIZE;
+                if (releasePoint.getY() - y < STEP_SIZE) {
+                    y = (int) releasePoint.getY(); // Setze y direkt auf das Ziel, wenn der verbleibende Abstand kleiner als STEP_SIZE ist
+                } else {
+                    y += STEP_SIZE;
+                }
             } else if (y > releasePoint.getY()) {
-                y -= STEP_SIZE;
+                if (y - releasePoint.getY() < STEP_SIZE) {
+                    y = (int) releasePoint.getY(); // Setze y direkt auf das Ziel, wenn der verbleibende Abstand kleiner als STEP_SIZE ist
+                } else {
+                    y -= STEP_SIZE;
+                }
             }
         }
 

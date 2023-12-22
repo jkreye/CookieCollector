@@ -27,7 +27,7 @@ public class Maze {
                         "#.####.#####.##.#####.####.#".toCharArray(),
                         "#o####.#####.##.#####.####o#".toCharArray(),
                         "#.####.#####.##.#####.####.#".toCharArray(),
-                        "T..........................T".toCharArray(),
+                        "#..........................#".toCharArray(),
                         "#.####.##.########.##.####.#".toCharArray(),
                         "#.####.##.########.##.####.#".toCharArray(),
                         "#......##....##....##......#".toCharArray(),
@@ -277,6 +277,18 @@ public class Maze {
 
     public int getCurrentLevel() {
         return currentLevel;
+    }
+
+    /**
+     * Berechnet die Breite des Labyrinths in Pixeln.
+     * @return Die Gesamtbreite des Labyrinths.
+     */
+    public int getMazeWidth() {
+        if (grid == null) {
+            return 0; // Kein Labyrinth vorhanden
+        }
+        int columns = grid[0].length; // Anzahl der Spalten (Annahme: alle Zeilen haben dieselbe Länge)
+        return columns * cellSize; // Gesamtbreite = Anzahl der Spalten * Zellengröße
     }
 }
 
