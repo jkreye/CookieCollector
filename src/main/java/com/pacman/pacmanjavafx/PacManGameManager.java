@@ -15,6 +15,8 @@ public class PacManGameManager {
     private int highScore;
     private int score;
     private static PacManGameManager instance;
+    private SoundManager soundManager;
+
 
     public static PacManGameManager getInstance() {
         if (instance == null) {
@@ -88,7 +90,7 @@ public class PacManGameManager {
     public void updateHighscore() {
         if (score > highScore) {
             highScore = score;
-            saveHighScore();
+            // saveHighScore();
         }
     }
 

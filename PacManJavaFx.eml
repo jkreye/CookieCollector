@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component LANGUAGE_LEVEL="JDK_21" inheritJdk="true">
+	<output-test url="file://$MODULE_DIR$/target/test-classes"/>
+	<contentEntry url="file://$MODULE_DIR$">
+		<testFolder url="file://$MODULE_DIR$/src/test/java"/>
+		<testFolder url="file://$MODULE_DIR$/src/test/resources"/>
+		<excludeFolder url="file://$MODULE_DIR$/target"/>
+	</contentEntry>
+	<lib name="Maven: org.junit.jupiter:junit-jupiter-api:5.9.2" scope="TEST"/>
+	<lib name="Maven: org.opentest4j:opentest4j:1.2.0" scope="TEST"/>
+	<lib name="Maven: org.junit.platform:junit-platform-commons:1.9.2" scope="TEST"/>
+	<lib name="Maven: org.apiguardian:apiguardian-api:1.1.2" scope="TEST"/>
+	<lib name="Maven: org.junit.jupiter:junit-jupiter-engine:5.9.2" scope="TEST"/>
+	<lib name="Maven: org.junit.platform:junit-platform-engine:1.9.2" scope="TEST"/>
+	<levels>
+		<level name="Maven: org.openjfx:javafx-controls:21-ea+24" value="project"/>
+		<level name="Maven: org.openjfx:javafx-controls:mac-aarch64:21-ea+24" value="project"/>
+		<level name="Maven: org.openjfx:javafx-fxml:21-ea+24" value="project"/>
+		<level name="Maven: org.openjfx:javafx-fxml:mac-aarch64:21-ea+24" value="project"/>
+		<level name="Maven: org.openjfx:javafx-media:21-ea+24" value="project"/>
+		<level name="Maven: org.openjfx:javafx-media:mac-aarch64:21-ea+24" value="project"/>
+		<level name="Maven: com.github.almasb:fxgl:17.2" value="project"/>
+		<level name="Maven: com.github.almasb:fxgl-core:17.2" value="project"/>
+		<level name="Maven: com.gluonhq.attach:audio:4.0.13" value="project"/>
+		<level name="Maven: com.github.almasb:fxgl-io:17.2" value="project"/>
+		<level name="Maven: com.gluonhq.attach:storage:4.0.13" value="project"/>
+		<level name="Maven: com.gluonhq.attach:util:4.0.13" value="project"/>
+		<level name="Maven: com.github.almasb:fxgl-entity:17.2" value="project"/>
+		<level name="Maven: com.github.almasb:fxgl-scene:17.2" value="project"/>
+		<level name="Maven: com.github.almasb:fxgl-gameplay:17.2" value="project"/>
+		<level name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.12.1" value="project"/>
+		<level name="Maven: com.fasterxml.jackson.core:jackson-databind:2.12.1" value="project"/>
+		<level name="Maven: com.fasterxml.jackson.core:jackson-core:2.12.1" value="project"/>
+		<level name="Maven: com.gluonhq.attach:lifecycle:4.0.13" value="project"/>
+		<level name="Maven: org.jetbrains.kotlin:kotlin-stdlib:modular:1.6.0" value="project"/>
+		<level name="Maven: org.jetbrains:annotations:13.0" value="project"/>
+		<level name="Maven: org.jetbrains.kotlin:kotlin-stdlib-common:1.6.0" value="project"/>
+		<level name="Maven: org.junit.jupiter:junit-jupiter-api:5.9.2" value="project"/>
+		<level name="Maven: org.opentest4j:opentest4j:1.2.0" value="project"/>
+		<level name="Maven: org.junit.platform:junit-platform-commons:1.9.2" value="project"/>
+		<level name="Maven: org.apiguardian:apiguardian-api:1.1.2" value="project"/>
+		<level name="Maven: org.junit.jupiter:junit-jupiter-engine:5.9.2" value="project"/>
+		<level name="Maven: org.junit.platform:junit-platform-engine:1.9.2" value="project"/>
+		<level name="Maven: org.openjfx:javafx-graphics:21-ea+24" value="project"/>
+		<level name="Maven: org.openjfx:javafx-graphics:mac-aarch64:21-ea+24" value="project"/>
+		<level name="Maven: org.openjfx:javafx-base:21-ea+24" value="project"/>
+		<level name="Maven: org.openjfx:javafx-base:mac-aarch64:21-ea+24" value="project"/>
+	</levels>
+</component>

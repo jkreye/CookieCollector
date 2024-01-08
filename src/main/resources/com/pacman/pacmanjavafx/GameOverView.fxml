@@ -6,16 +6,21 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.pacman.pacmanjavafx.PacManGameOverController"
+            styleClass="anchor-pane-background"
+            stylesheets="@css/style.css"
             prefHeight="1080" prefWidth="1920" style="-fx-background-color: black;">
 
-    <VBox alignment="CENTER" spacing="20" layoutX="760" layoutY="440">
-        <Text text="Game Over" style="-fx-font-size: 80px; -fx-fill: yellow;"/>
+    <VBox alignment="CENTER" spacing="20" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <Text text="Game Over" style="-fx-font-size: 80px; -fx-fill: yellow;" styleClass="custom-font"/>
         <Button fx:id="retryButton" text="Retry" onAction="#onRetryButtonClicked"
-                style="-fx-background-color: #FFCC00; -fx-text-fill: black;"
-                prefWidth="400" prefHeight="100"/>
+                style="-fx-background-color: transparent; -fx-font-size: 40px; -fx-text-fill: white;"
+                prefWidth="400" prefHeight="100"
+                styleClass="custom-font"/>
         <Button fx:id="mainMenuButton" text="Main Menu" onAction="#onMainMenuButtonClicked"
-                style="-fx-background-color: #FFCC00; -fx-text-fill: black;"
-                prefWidth="400" prefHeight="100"/>
+                style="-fx-background-color: transparent; -fx-font-size: 40px; -fx-text-fill: white;"
+                prefWidth="600" prefHeight="100"
+                styleClass="custom-font"/>
     </VBox>
 
 </AnchorPane>

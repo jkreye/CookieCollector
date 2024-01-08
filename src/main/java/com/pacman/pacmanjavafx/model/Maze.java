@@ -91,11 +91,11 @@ public class Maze {
                 {
                         // Layout für Level 3
                         "############################".toCharArray(),
-                        "#............##....CBSI....#".toCharArray(),
-                        "#.####.#####.##.#####.####.#".toCharArray(),
-                        "#o####.#####.##.#####.####o#".toCharArray(),
-                        "#.####.#####.##.#####.####.#".toCharArray(),
-                        "T..........................T".toCharArray(),
+                        "#............##............#".toCharArray(),
+                        "#.##########.##.##########.#".toCharArray(),
+                        "#o##########.##.##########o#".toCharArray(),
+                        "#.##########.##.##########.#".toCharArray(),
+                        "#......##..................#".toCharArray(),
                         "#.####.##.########.##.####.#".toCharArray(),
                         "#.####.##.########.##.####.#".toCharArray(),
                         "#......##....##....##......#".toCharArray(),
@@ -104,7 +104,7 @@ public class Maze {
                         "     #.##     R    ##.#     ".toCharArray(),
                         "     #.## ###--### ##.#     ".toCharArray(),
                         "######.## #      # ##.######".toCharArray(),
-                        "T     .   #      #   .     T".toCharArray(),
+                        "T     .   # CBSI #   .     T".toCharArray(),
                         "######.## #      # ##.######".toCharArray(),
                         "     #.## ######## ##.#     ".toCharArray(),
                         "     #.##    P     ##.#     ".toCharArray(), // 'P' als Startpunkt
@@ -142,10 +142,8 @@ public class Maze {
     }
 
     public void changeLevel(int level) {
-        if (level >= 0 && level < grids.length) {
-            currentLevel = level;
-            resetMaze();
-        }
+        currentLevel = (level % 3) == 0 ? 2 : (level % 3) - 1;
+        resetMaze();
     }
 
     public char[][] getGrid() {

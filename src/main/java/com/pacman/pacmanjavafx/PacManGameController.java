@@ -2,6 +2,7 @@ package com.pacman.pacmanjavafx;
 
 import com.pacman.pacmanjavafx.model.*;
 import javafx.animation.AnimationTimer;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
@@ -11,9 +12,11 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,6 +38,7 @@ public class PacManGameController {
     // Instanzen
     private PacMan pacman;
     private Maze maze;
+    private SoundManager soundManager = SoundManager.getInstance();
     private List<Ghost> ghosts;
     private Random random = new Random();
 
@@ -50,15 +54,16 @@ public class PacManGameController {
     private ACTION nextDirection = ACTION.MOVE_NONE;
     private int score = 0; // Punktestand
     private int lives = 3; // Anzahl der Leben
+    private int level = 1; // Anzahl der Leben
 
     private long vulnerabilityDuration = 0;
     private static final long VULNERABILITY_TIME = 7 * 1_000_000_000L;
     private static final long BLINK_THRESHOLD = 3 * 1_000_000_000L;
 
     private long nextGhostReleaseTime = 0;
-    private static final long GHOST_RELEASE_INTERVAL = 10_000L * 1_000_000L; // 10 Sekunden in Nanosekunden
+    private static final long GHOST_RELEASE_INTERVAL = 10 * 1_000L; // 10 Sekunden in Nanosekunden
     private long lastGhostReleaseTime = 0;
-    private static final long INITIAL_RELEASE_DELAY = 5_000L * 1_000_000L; // 2 Sekunde in Nanosekunden
+    private static final long INITIAL_RELEASE_DELAY = 5 * 1_000L; // 5 Sekunde in Milli
 
     // GameLoop
     private static long UPDATE_TIME = 1_000_000_000 / 20; // 20 Updates pro Sekunde
@@ -127,7 +132,12 @@ public class PacManGameController {
     public void initialize() {
         // Initialisierung des Spiels
         setupGame();
-        setupInputHandling();
+        soundManager.playSound("pacman_gamestart", false);
+
+        // Verzögerung von 5 Sekunden einstellen
+        PauseTransition pause = new PauseTransition(Duration.seconds(5));
+        pause.setOnFinished(event -> setupInputHandling());
+        pause.play();
 
         this.gameLoop = new AnimationTimer() {
             @Override
@@ -199,6 +209,7 @@ public class PacManGameController {
         nextDirection = ACTION.MOVE_NONE;
         lives = 3;
         score = 0;
+        lastGhostReleaseTime = System.currentTimeMillis();
         this.nextGhostReleaseTime = System.currentTimeMillis() + INITIAL_RELEASE_DELAY;
 
         totalDots = maze.getTotalDots();
@@ -228,28 +239,30 @@ public class PacManGameController {
     private void setupInputHandling() {
         gameCanvas.setFocusTraversable(true);
         gameCanvas.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.UP) {
+            if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.W) {
                 nextDirection = ACTION.MOVE_UP;
                 if (!isCollision(ACTION.MOVE_UP)) {
                     setLastDirection(ACTION.MOVE_UP);
                 }
-            } else if (event.getCode() == KeyCode.DOWN) {
+            } else if (event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.S) {
                 nextDirection = ACTION.MOVE_DOWN;
                 if (!isCollision(ACTION.MOVE_DOWN)) {
                     setLastDirection(ACTION.MOVE_DOWN);
                 }
-            } else if (event.getCode() == KeyCode.LEFT) {
+            } else if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A) {
                 nextDirection = ACTION.MOVE_LEFT;
                 if (!isCollision(ACTION.MOVE_LEFT)) {
                     setLastDirection(ACTION.MOVE_LEFT);
                 }
-            } else if (event.getCode() == KeyCode.RIGHT) {
+            } else if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.D) {
                 nextDirection = ACTION.MOVE_RIGHT;
                 if (!isCollision(ACTION.MOVE_RIGHT)) {
                     setLastDirection(ACTION.MOVE_RIGHT);
                 }
             } else if (event.getCode() == KeyCode.ESCAPE) {
                 handleEscapeKeyPress();
+            } else if (event.getCode() == KeyCode.O) {
+                onLevelComplete();
             }
         });
     }
@@ -266,9 +279,11 @@ public class PacManGameController {
             updateGhostStates(now);
         }
 
-        if (now - lastGhostReleaseTime >= GHOST_RELEASE_INTERVAL) {
+        if (System.currentTimeMillis() >= nextGhostReleaseTime) {
             releaseGhostFromJail();
-            lastGhostReleaseTime = now;
+            lastGhostReleaseTime = System.currentTimeMillis();
+            nextGhostReleaseTime = lastGhostReleaseTime + GHOST_RELEASE_INTERVAL;
+
         }
 
     }
@@ -328,15 +343,15 @@ public class PacManGameController {
             PacManGameManager.getInstance().updateHighscore();
 
             // Erstellen Sie eine Instanz von Cody
-            Cody cody = new Cody();
+            // Cody cody = new Cody();
 
 
             String[] messages = PacManGameManager.getInstance().getGameOverMessages(currentScore);
-            cody.say(messages);
+            // cody.say(messages);
 
             // Fügen Sie Cody zur Parent-Instanz hinzu
             if (gameOverRoot instanceof Pane) {
-                ((Pane) gameOverRoot).getChildren().add(cody);
+                // ((Pane) gameOverRoot).getChildren().add(cody);
             }
 
             Scene gameOverScene = new Scene(gameOverRoot, WIDTH, HEIGHT);
@@ -346,7 +361,7 @@ public class PacManGameController {
             stage.sceneProperty().addListener((observable, oldScene, newScene) -> {
                 // Überprüfen, ob die alte Szene die gameOverScene war
                 if (oldScene != null && oldScene.getRoot() == gameOverRoot) {
-                    cody.quit();
+                    //cody.quit();
                 }
             });
 
@@ -499,8 +514,11 @@ public class PacManGameController {
      * Wenn das dritte Level abgeschlossen ist, wird das Spiel als gewonnen markiert.
      */
     private void onLevelComplete() {
+
         // next level!
-        int nextLevel = (maze.getCurrentLevel())+1;
+        int nextLevel = (this.level)+1;
+        this.setLevel(nextLevel);
+
         maze.changeLevel(nextLevel);
 
         totalDots = maze.getTotalDots();
@@ -509,6 +527,7 @@ public class PacManGameController {
         collectedDots=0;
         collectedPpills=0;
         updateTickratesForLevel(nextLevel);
+        nextGhostReleaseTime = System.currentTimeMillis() + 2 * 1_000L;
     }
 
     /**
@@ -1091,4 +1110,11 @@ public class PacManGameController {
         return lives;
     }
 
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
 }

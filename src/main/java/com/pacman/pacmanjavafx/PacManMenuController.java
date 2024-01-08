@@ -34,7 +34,6 @@ public class PacManMenuController {
     private Text highscoreText;
 
     public void initialize() {
-        // Angenommen, Sie haben eine Methode, um den Highscore zu holen
         highscoreText.setText("Highscore: " + PacManGameManager.getInstance().getHighScore());
         startButton.setFocusTraversable(true);
 
@@ -57,6 +56,7 @@ public class PacManMenuController {
     @FXML
     private void onStartButtonClicked() {
         try {
+            SoundManager.getInstance().stopSound("pacman_titlemusic");
             // Laden Sie Ihre Pac-Man-Spielszene
             FXMLLoader loader = new FXMLLoader(getClass().getResource("PacManGameView.fxml"));
             Parent gameRoot = loader.load();

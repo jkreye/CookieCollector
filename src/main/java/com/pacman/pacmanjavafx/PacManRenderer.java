@@ -66,6 +66,7 @@ public class PacManRenderer {
         // Skalieren des Bildes auf die Größe der Zelle
         pacmanImageView.setFitWidth(radius*2);
         pacmanImageView.setFitHeight(radius*2);
+        pacmanImageView.setSmooth(true);
 
         SnapshotParameters params = new SnapshotParameters();
         params.setFill(Color.TRANSPARENT);
@@ -220,7 +221,7 @@ public class PacManRenderer {
 
     public void renderLevelAndProgress(PacManGameController gameController, int startX, int mazeWidth) {
         // Level-Text
-        int currentLevel = gameController.getMazeInst().getCurrentLevel() + 1;
+        int currentLevel = gameController.getLevel();
         String levelText = "Level " + currentLevel;
         gc.setFill(Color.WHITE); // Weißer Text
         gc.setFont(new Font("Arial", 20)); // Schriftart und -größe einstellen

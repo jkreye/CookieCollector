@@ -8,3 +8,11 @@
     -fx-fill: yellow;
     -fx-text-fill: yellow;
 }
+
+.anchor-pane-background {
+    -fx-background-color: black;
+    -fx-background-image: url('../assets/img/background.png');
+    -fx-background-size: contain;
+    -fx-background-repeat: repeat;
+    -fx-background-position: center center;
+}
